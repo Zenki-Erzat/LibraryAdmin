@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="top-bar">
+        <button class="menu-toggle">☰</button>
+    </div>
+    <aside class="sidebar">
+        <div class="profile">
+            <img src="/png/static-assets-upload3028763411717145391.svg" alt="Аватар">
+            <h6>Тургазинов Ерзат</h6>
+        </div>
+        <div class="auth-buttons">
+            <button class="auth-button-left" href="#">Регистрация</button>
+            <button class="auth-button-right" href="#">Выход</button>
+        </div>
+        <nav>
+            <a href="Block0.html" class="active"><img src="/png/микро.svg"><span>ОҚИҒАЛАР АНОНСЫ</span></a>
+            <a href="Block1.html"><img src="/png/книга.svg"><span>Кітапхана жаңалықтары</span></a>
+            <a href="Block2.html"><img src="/png/карзина.svg"><span>Жаңа түсімдер</span></a>
+            <a href="Block3.html"><img src="/png/_.svg"><span>Кітапханашыға сұрақ</span></a>
+        </nav>
+    </aside>
+    <main class="content">
+        <form class="form block0-form">
+            <div>
+                <label>Заголовка</label>
+                <input type="text">
+            </div>
+
+            <div>
+                <label>Название</label>
+                <input type="text">
+            </div>
+
+            <div>
+                <label>Тип</label>
+                <input type="text">
+            </div>
+
+            <div>
+                <label>Дата</label>
+                <input type="date">
+            </div>
+
+            <div>
+                <label>Описание</label>
+                <textarea></textarea>
+            </div>
+
+            <button type="submit" class="save-button">Сохранить</button>
+        </form>
+    </main>
+
+    <script>
+        const textarea = document.querySelector('textarea');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+
+        // Add sidebar toggle functionality
+        const menuToggle = document.querySelector('.menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        const content = document.querySelector('.content');
+        const navLinks = document.querySelectorAll('nav a');
+        const activeLink = document.querySelector('nav a.active');
+        const body = document.body;
+
+        // Add active link animation
+        if (activeLink) {
+            activeLink.classList.add('active-animated');
+        }
+
+        // Check if sidebar was collapsed
+        if (localStorage.getItem('sidebarCollapsed') === 'true') {
+            sidebar.classList.add('collapsed');
+            content.classList.add('expanded');
+        }
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            content.classList.toggle('expanded');
+            menuToggle.classList.toggle('active');
+            body.classList.toggle('menu-open');
+            
+            // Add animation to nav links
+            navLinks.forEach((link, index) => {
+                setTimeout(() => {
+                    link.style.transition = 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
+                }, index * 50);
+            });
+            
+            // Save sidebar state
+            localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+        });
+
+        // Add hover effect to nav links
+        navLinks.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                if (sidebar.classList.contains('collapsed')) {
+                    link.style.transform = 'scale(1.05)';
+                }
+            });
+            
+            link.addEventListener('mouseleave', () => {
+                if (sidebar.classList.contains('collapsed') && !link.classList.contains('active')) {
+                    link.style.transform = 'scale(1)';
+                }
+            });
+        });
+
+        // Close menu when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) {
+                if (!sidebar.contains(e.target) && !menuToggle.contains(e.target) && sidebar.classList.contains('collapsed')) {
+                    sidebar.classList.remove('collapsed');
+                    content.classList.remove('expanded');
+                    menuToggle.classList.remove('active');
+                    body.classList.remove('menu-open');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+
